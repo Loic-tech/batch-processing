@@ -94,7 +94,7 @@ public class CustomerController {
     @PutMapping(value = "update/{id}")
     public ResponseEntity<Customer> putCustomer(@PathVariable Integer id, @RequestBody Customer customer) {
         Customer newCustomer = this.service.putCustomer(id, customer);
-        return new ResponseEntity<>(newCustomer, HttpStatus.ACCEPTED)
+        return new ResponseEntity<>(newCustomer, HttpStatus.ACCEPTED);
     }
 
     @PutMapping ("range/min")
