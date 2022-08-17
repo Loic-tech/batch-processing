@@ -12,7 +12,7 @@ import javax.persistence.Table;
 @Entity
 @Table(name = "CUSTOMERS")
 @Data
-@AllArgsConstructor
+@AllArgsConstructor(staticName = "build")
 @NoArgsConstructor
 public class Customer {
 

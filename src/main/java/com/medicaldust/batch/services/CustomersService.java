@@ -1,6 +1,8 @@
 package com.medicaldust.batch.services;
 
+import com.medicaldust.batch.dto.CustomerRequest;
 import com.medicaldust.batch.entity.Customer;
+import com.medicaldust.batch.exception.UserNotFoundException;
 import com.medicaldust.batch.repository.CustomerRepository;
 import lombok.RequiredArgsConstructor;
 import org.springframework.cache.annotation.Cacheable;
@@ -27,7 +29,10 @@ public class CustomersService {
         return pageValue.getContent();
     }
 
-    public void addNewCustomer(Customer customer) {
+    public void addNewCustomer(CustomerRequest customerRequest) {
+        Customer customer = Customer
+                .build(100002, customerRequest.getFirstname(), customerRequest.getLastname(),
+                        customerRequest.getEmail(), customerRequest.getPhone(), customerRequest.getCountry());
         repository.save(customer);
     }
 
@@ -36,15 +41,14 @@ public class CustomersService {
     }
 
     @Cacheable(value = "SingleCustomerByID")
-    public Customer getSingleCustomer(Integer id) {
+    public Customer getSingleCustomer(Integer id) throws UserNotFoundException {
         Optional<Customer> optionalCustomer = repository.findById(id);
 
         if (optionalCustomer.isPresent()) {
             return optionalCustomer.get();
         }
         else {
-            System.out.println("CUSTOMER NOT FOUND");
-            return null;
+            throw new UserNotFoundException("USER NOT FOUND WITH ID : " + id);
         }
     }
 

@@ -1,9 +1,12 @@
 package com.medicaldust.batch.controller;
 
+import com.medicaldust.batch.dto.CustomerRequest;
 import com.medicaldust.batch.entity.Customer;
+import com.medicaldust.batch.exception.UserNotFoundException;
 import com.medicaldust.batch.repository.RangeRepository;
 import com.medicaldust.batch.services.CustomersService;
 import lombok.RequiredArgsConstructor;
+import lombok.Value;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.batch.core.Job;
@@ -18,6 +21,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
+import javax.validation.Valid;
 import java.util.List;
 import java.util.Optional;
 
@@ -58,9 +62,9 @@ public class CustomerController {
     }
 
     @PostMapping(value = "add")
-    public ResponseEntity<Customer> addNewCustomer(@RequestBody Customer customer) {
-        service.addNewCustomer(customer);
-        return new ResponseEntity<>(customer, HttpStatus.CREATED);
+    public ResponseEntity<?> addNewCustomer(@RequestBody @Valid CustomerRequest customerRequest) {
+        service.addNewCustomer(customerRequest);
+        return new ResponseEntity<>(customerRequest, HttpStatus.CREATED);
     }
 
     @DeleteMapping(value = "delete/{id}")
@@ -70,7 +74,7 @@ public class CustomerController {
     }
 
     @GetMapping(value = "single-customer/{id}")
-    public ResponseEntity<Customer> getSingleCustomer(@PathVariable Integer id) {
+    public ResponseEntity<Customer> getSingleCustomer(@PathVariable Integer id) throws UserNotFoundException {
         Customer customer = this.service.getSingleCustomer(id);
         return new ResponseEntity<>(customer, HttpStatus.ACCEPTED);
     }
