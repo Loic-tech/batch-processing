@@ -54,7 +54,6 @@ public class CustomerController {
         int pageValue = Integer.parseInt(page);
         int sizeValue = Integer.parseInt(size);
 
-        logger.info("Showed list of customers...");
         return new ResponseEntity<>(this.service.getCustomersSorted(pageValue, sizeValue), HttpStatus.OK);
     }
 
